@@ -1,2 +1,3 @@
 # MasseyHacks2
-Myo arm band project at Massey Hacks 2
+Real-time gesture controlled audio manipulation software which plays, edits, and visualizes your music. 
+Created with Myo, Python, and C++
