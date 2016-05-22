@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <algorithm>
+#include <cstdio>
 
 // The only file that needs to be included to use the Myo C++ SDK is myo.hpp.
 #include <myo/myo.hpp>
@@ -103,7 +104,7 @@ public:
     // onLock() is called whenever Myo has become locked. No pose events will be sent until the Myo is unlocked again.
     void onLock(myo::Myo* myo, uint64_t timestamp)
     {
-        isUnlocked = false;
+        isUnlocked = true;
     }
 
     // There are other virtual functions in DeviceListener that we could override here, like onAccelerometerData().
@@ -116,31 +117,37 @@ public:
         std::cout << '\r';
 
         // Print out the orientation. Orientation data is always available, even if no arm is currently recognized.
+
+        /*
         std::cout << '[' << std::string(roll_w, '*') << std::string(18 - roll_w, ' ') << ']'
                   << '[' << std::string(pitch_w, '*') << std::string(18 - pitch_w, ' ') << ']'
                   << '[' << std::string(yaw_w, '*') << std::string(18 - yaw_w, ' ') << ']';
+        */
 
-        if (onArm) {
             // Print out the lock state, the currently recognized pose, and which arm Myo is being worn on.
 
             // Pose::toString() provides the human-readable name of a pose. We can also output a Pose directly to an
             // output stream (e.g. std::cout << currentPose;). In this case we want to get the pose name's length so
             // that we can fill the rest of the field with spaces below, so we obtain it as a string using toString().
-            std::string poseString = currentPose.toString();
 
+
+        freopen("DATA.txt","w",stdout);
+        std::string poseString = currentPose.toString();
+        std::cout<<pitch_w<<" "<<poseString;
+
+
+            /*
             std::cout << '[' << (isUnlocked ? "unlocked" : "locked  ") << ']'
-                      << '[' << (whichArm == myo::armLeft ? "L" : "R") << ']'
+                      << '[' << (whichArm == myo::armRight ? "L" : "R") << ']'
                       << '[' << poseString << std::string(14 - poseString.size(), ' ') << ']';
-        } else {
-            // Print out a placeholder for the arm and pose when Myo doesn't currently know which arm it's on.
-            std::cout << '[' << std::string(8, ' ') << ']' << "[?]" << '[' << std::string(14, ' ') << ']';
-        }
+            */
 
         std::cout << std::flush;
     }
 
     // These values are set by onArmSync() and onArmUnsync() above.
-    bool onArm;
+    bool onArm;std::string poseString = currentPose.toString();
+
     myo::Arm whichArm;
 
     // This is set by onUnlocked() and onLocked() above.
